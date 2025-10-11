@@ -1,25 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendrier</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="calendar">
+      <!-- Navigation mois -->
+      <div class="calendar-header">
+        <button id="prev">&lt;</button>
+        <div id="month-year"></div>
+        <button id="next">&gt;</button>
+      </div>
 
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="grid-month" id="month">
-        <div class="week" id="single-week">
-            <div class="day monday"></div>
-            <div class="day tuesday"></div>
-            <div class="day wednesday"></div>
-            <div class="day thursday"></div>
-            <div class="day friday"></div>
-            <div class="day saturday"></div>
-            <div class="day sunday"></div>
+      <!-- Jours de la semaine -->
+      <div class="week-days">
+        <div>Lun</div>
+        <div>Mar</div>
+        <div>Mer</div>
+        <div>Jeu</div>
+        <div>Ven</div>
+        <div>Sam</div>
+        <div>Dim</div>
+      </div>
+
+      <!-- Conteneur du mois -->
+      <div class="grid-month" id="month">
+        <!-- Modèle d'une semaine caché pour clonage -->
+        <div class="week template-week" id="single-week">
+          <div class="day"></div>
+          <div class="day"></div>
+          <div class="day"></div>
+          <div class="day"></div>
+          <div class="day"></div>
+          <div class="day"></div>
+          <div class="day"></div>
         </div>
+      </div>
     </div>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

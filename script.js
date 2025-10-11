@@ -1,54 +1,138 @@
-const singleWeek = document.getElementById('single-week');
-const month = document.getElementById('month');
+// ----------------------------
+// Références DOM
+// ----------------------------
+const singleWeek = document.getElementById("single-week");
+const monthContainer = document.getElementById("month");
+const monthYearLabel = document.getElementById("month-year");
+const prevBtn = document.getElementById("prev");
+const nextBtn = document.getElementById("next");
 
-// On prend l'année et le mois du jour actuel
+// ----------------------------
+// Variables globales
+// ----------------------------
 const today = new Date();
-const year = today.getFullYear();
-const monthIndex = today.getMonth(); // 0 = janvier
+let currentYear = today.getFullYear();
+let currentMonth = today.getMonth(); // 0 = janvier
 
-// Générer toutes les dates du mois
-function getDaysInMonth(year, month) {
-    const days = [];
-    const date = new Date(year, month, 1);
-    while (date.getMonth() === month) {
-        days.push(new Date(date));
-        date.setDate(date.getDate() + 1);
+// ----------------------------
+// Générer un mois complet avec débordements
+// ----------------------------
+function generateMonth(year, monthIndex) {
+  const days = [];
+
+  // 1er jour du mois
+  const firstOfMonth = new Date(year, monthIndex, 1);
+  let startDay = firstOfMonth.getDay(); // dimanche = 0
+  startDay = startDay === 0 ? 6 : startDay - 1; // lundi = 0
+
+  // Jours du mois précédent
+  const prevMonthLastDate = new Date(year, monthIndex, 0).getDate();
+  for (let i = startDay; i > 0; i--) {
+    days.push(new Date(year, monthIndex - 1, prevMonthLastDate - i + 1));
+  }
+
+  // Jours du mois courant
+  const currentMonthDays = new Date(year, monthIndex + 1, 0).getDate();
+  for (let i = 1; i <= currentMonthDays; i++) {
+    days.push(new Date(year, monthIndex, i));
+  }
+
+  // Compléter la dernière semaine avec le mois suivant
+  let nextMonthDay = 1; // commence à 1
+  while (days.length % 7 !== 0) {
+    days.push(new Date(year, monthIndex + 1, nextMonthDay));
+    nextMonthDay++;
+  }
+
+  return days;
+}
+
+// ----------------------------
+// Affichage du mois
+// ----------------------------
+function renderMonth(year, monthIndex) {
+  monthContainer.innerHTML = "";
+
+  const days = generateMonth(year, monthIndex);
+
+  // Mettre à jour le label mois/année
+  const monthNames = [
+    "Janvier",
+    "Février",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juillet",
+    "Août",
+    "Septembre",
+    "Octobre",
+    "Novembre",
+    "Décembre",
+  ];
+  monthYearLabel.textContent = `${monthNames[monthIndex]} ${year}`;
+
+  const weeksCount = days.length / 7;
+
+  for (let w = 0; w < weeksCount; w++) {
+    const week = singleWeek.cloneNode(true);
+    week.classList.remove("template-week");
+    week.removeAttribute("id");
+
+    const weekDays = week.querySelectorAll(".day");
+
+    for (let d = 0; d < 7; d++) {
+      const dayObj = days[w * 7 + d];
+      weekDays[d].textContent = dayObj.getDate();
+      const yyyy = dayObj.getFullYear();
+      const mm = String(dayObj.getMonth() + 1).padStart(2, "0");
+      const dd = String(dayObj.getDate()).padStart(2, "0");
+      weekDays[d].dataset.date = `${yyyy}-${mm}-${dd}`;
+
+      // Classes CSS
+      weekDays[d].classList.remove("prev-month", "current-month", "next-month");
+      if (dayObj.getMonth() < monthIndex)
+        weekDays[d].classList.add("prev-month");
+      else if (dayObj.getMonth() > monthIndex)
+        weekDays[d].classList.add("next-month");
+      else weekDays[d].classList.add("current-month");
     }
-    return days;
+
+    monthContainer.appendChild(week);
+  }
 }
 
-const monthDays = getDaysInMonth(year, monthIndex);
-
-// Calculer le jour de la semaine du 1er (lundi = 0)
-let firstDay = new Date(year, monthIndex, 1).getDay();
-firstDay = (firstDay === 0) ? 6 : firstDay - 1; 
-
-// Cloner 5 semaines supplémentaires (la première existe déjà)
-for (let i = 0; i < 5; i++) {
-    const clone = singleWeek.cloneNode(true);
-    month.appendChild(clone);
-}
-
-// Récupérer toutes les semaines (maintenant toutes les 6)
-const weeks = document.querySelectorAll('.week');
-let dayIndex = 0;
-
-weeks.forEach((week, wIndex) => {
-    const days = week.querySelectorAll('.day');
-    days.forEach((day, i) => {
-        // Décalage pour la première semaine
-        if(wIndex === 0 && i < firstDay){
-            day.textContent = '';
-            return;
-        }
-
-        // Remplir les jours
-        if(dayIndex < monthDays.length){
-            day.textContent = monthDays[dayIndex].getDate();
-            day.dataset.date = monthDays[dayIndex].toISOString();
-            dayIndex++;
-        } else {
-            day.textContent = '';
-        }
-    });
+// ----------------------------
+// Navigation
+// ----------------------------
+prevBtn.addEventListener("click", () => {
+  currentMonth--;
+  if (currentMonth < 0) {
+    currentMonth = 11;
+    currentYear--;
+  }
+  renderMonth(currentYear, currentMonth);
 });
+
+nextBtn.addEventListener("click", () => {
+  currentMonth++;
+  if (currentMonth > 11) {
+    currentMonth = 0;
+    currentYear++;
+  }
+  renderMonth(currentYear, currentMonth);
+});
+
+// ----------------------------
+// Clic sur un jour
+// ----------------------------
+monthContainer.addEventListener("click", (e) => {
+  if (e.target.classList.contains("day")) {
+    console.log("Jour cliqué :", e.target.dataset.date);
+  }
+});
+
+// ----------------------------
+// Initialisation
+// ----------------------------
+renderMonth(currentYear, currentMonth);

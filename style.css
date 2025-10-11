@@ -1,45 +1,67 @@
 body {
-    padding: 0;
-    margin: 0;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
+}
+
+.calendar {
+  width: 90%;
+  max-width: 600px;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.calendar-header button {
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+#month-year {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.week-days {
+  display: flex;
+}
+
+.week-days div {
+  flex: 1;
+  text-align: center;
+  font-weight: bold;
+  padding: 5px 0;
 }
 
 .grid-month {
-    display: grid;
-    width: 100vw;
-    border-bottom: solid 1px black;
-    border-left: solid 1px black;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.week{
-    display: flex;
+.week {
+  display: flex;
+  gap: 5px;
 }
 
 .day {
-    width: 100%;
-    height: 100px;
-    border-top: solid 1px black;
-    border-right: solid 1px black;
-    text-align: center;
+  flex: 1;
+  height: 80px;
+  border: 1px solid #ccc;
+  text-align: center;
+  line-height: 80px;
+  cursor: pointer;
+  background-color: #f4f4f4;
 }
 
-.monday {
-    background-color: #E4D7C4;
-}
-.tuesday {
-    background-color: #E4D7C4;
-}
-.wednesday {
-    background-color: #E4D7C4;
-}
-.thursday {
-    background-color: #E4D7C4;
-}
-.friday {
-    background-color: #E4D7C4;
-}
-.saturday {
-    background-color: #E4D7C4;
-}
-.sunday {
-    background-color: #E4D7C4;
+.day.prev-month,
+.day.next-month {
+  color: #aaa;
 }
