@@ -6,6 +6,30 @@ const monthContainer = document.getElementById("month");
 const monthYearLabel = document.getElementById("month-year");
 const prevBtn = document.getElementById("prev");
 const nextBtn = document.getElementById("next");
+const popupTraining = document.getElementById("popup-training");
+const monthNames = [
+  "Janvier",
+  "Février",
+  "Mars",
+  "Avril",
+  "Mai",
+  "Juin",
+  "Juillet",
+  "Août",
+  "Septembre",
+  "Octobre",
+  "Novembre",
+  "Décembre",
+];
+const dayNames = [
+  "Lundi",
+  "Mardi",
+  "Mercredi",
+  "Jeudi",
+  "Vendredi",
+  "Samedi",
+  "Dimanche",
+];
 
 // ----------------------------
 // Variables globales
@@ -56,20 +80,6 @@ function renderMonth(year, monthIndex) {
   const days = generateMonth(year, monthIndex);
 
   // Mettre à jour le label mois/année
-  const monthNames = [
-    "Janvier",
-    "Février",
-    "Mars",
-    "Avril",
-    "Mai",
-    "Juin",
-    "Juillet",
-    "Août",
-    "Septembre",
-    "Octobre",
-    "Novembre",
-    "Décembre",
-  ];
   monthYearLabel.textContent = `${monthNames[monthIndex]} ${year}`;
 
   const weeksCount = days.length / 7;
@@ -83,19 +93,41 @@ function renderMonth(year, monthIndex) {
 
     for (let d = 0; d < 7; d++) {
       const dayObj = days[w * 7 + d];
-      weekDays[d].textContent = dayObj.getDate();
+      const weekDayCell = weekDays[d];
+
+      // Vider le contenu précédent
+      weekDayCell.innerHTML = "";
+
+      // Création du span pour le chiffre du jour
+      const dayNumber = document.createElement("span");
+      dayNumber.textContent = dayObj.getDate();
+      dayNumber.classList.add("day-number");
+
+      // Ajouter la classe today si c'est le jour actuel
+      if (
+        dayObj.getFullYear() === today.getFullYear() &&
+        dayObj.getMonth() === today.getMonth() &&
+        dayObj.getDate() === today.getDate()
+      ) {
+        dayNumber.classList.add("today");
+      }
+
+      // Ajouter le span à la case
+      weekDayCell.appendChild(dayNumber);
+
+      // Dataset pour la date
       const yyyy = dayObj.getFullYear();
       const mm = String(dayObj.getMonth() + 1).padStart(2, "0");
       const dd = String(dayObj.getDate()).padStart(2, "0");
-      weekDays[d].dataset.date = `${yyyy}-${mm}-${dd}`;
+      weekDayCell.dataset.date = `${yyyy}-${mm}-${dd}`;
 
-      // Classes CSS
-      weekDays[d].classList.remove("prev-month", "current-month", "next-month");
+      // Classes CSS pour le mois précédent / courant / suivant
+      weekDayCell.classList.remove("prev-month", "current-month", "next-month");
       if (dayObj.getMonth() < monthIndex)
-        weekDays[d].classList.add("prev-month");
+        weekDayCell.classList.add("prev-month");
       else if (dayObj.getMonth() > monthIndex)
-        weekDays[d].classList.add("next-month");
-      else weekDays[d].classList.add("current-month");
+        weekDayCell.classList.add("next-month");
+      else weekDayCell.classList.add("current-month");
     }
 
     monthContainer.appendChild(week);
@@ -124,11 +156,24 @@ nextBtn.addEventListener("click", () => {
 });
 
 // ----------------------------
-// Clic sur un jour
+// Clic sur un jour & Apparition popup groupe musculaire
 // ----------------------------
 monthContainer.addEventListener("click", (e) => {
-  if (e.target.classList.contains("day")) {
-    console.log("Jour cliqué :", e.target.dataset.date);
+  if (e.target.closest(".day")) {
+    const popupDate = document.getElementById("popup-date");
+    const dateClicked = e.target.closest(".day").dataset.date;
+    const dateObj = new Date(dateClicked);
+
+    const formattedDate =
+      dayNames[(dateObj.getDay() + 6) % 7] +
+      " " +
+      dateObj.getDate() +
+      " " +
+      monthNames[dateObj.getMonth()];
+
+    popupTraining.style.display = "flex";
+
+    popupDate.textContent = formattedDate;
   }
 });
 

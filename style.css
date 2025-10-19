@@ -10,6 +10,7 @@ body {
 .calendar {
   width: 90%;
   max-width: 600px;
+  position: relative;
 }
 
 .calendar-header {
@@ -60,8 +61,37 @@ body {
   cursor: pointer;
   background-color: #f4f4f4;
 }
+.day-number.today {
+  background-color: rgb(63, 12, 12);
+  border-radius: 50%;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  color: white;
+  text-align: center;
+  align-items: center;
+}
 
 .day.prev-month,
 .day.next-month {
   color: #aaa;
+}
+
+.popup-training {
+  display: none;
+  justify-content: center;
+  width: 50%;
+  height: 350px;
+  background-color: rgb(40, 57, 66);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 12px;
+}
+.popup-date {
+  color: white;
+  display: flex;
+  padding-top: 10%;
 }
