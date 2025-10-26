@@ -9,7 +9,8 @@ body {
 
 .calendar {
   width: 90%;
-  max-width: 600px;
+  max-width: 800px;
+  height: 100vh;
   position: relative;
 }
 
@@ -45,16 +46,17 @@ body {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  height: 90vh;
 }
 
 .week {
   display: flex;
   gap: 5px;
+  height: 15%;
 }
 
 .day {
   flex: 1;
-  height: 80px;
   border: 1px solid #ccc;
   text-align: center;
   line-height: 80px;
@@ -78,20 +80,55 @@ body {
   color: #aaa;
 }
 
-.popup-training {
+.popup-preview-day {
   display: none;
-  justify-content: center;
+  justify-content: space-between;
   width: 50%;
-  height: 350px;
+  height: 550px;
   background-color: rgb(40, 57, 66);
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -75%);
   border-radius: 12px;
+}
+.prev-day,
+.next-day {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: none;
+  margin: 0;
+  padding: 10px;
+  cursor: pointer;
+  background-color: red;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto 10px;
+  transition: 0.3s ease;
+}
+.prev-day:hover,
+.next-day:hover {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: none;
+  margin: 0;
+  padding: 10px;
+  cursor: pointer;
+  background-color: black;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto 10px;
 }
 .popup-date {
   color: white;
   display: flex;
+  justify-content: center;
   padding-top: 10%;
+  width: 350px;
 }

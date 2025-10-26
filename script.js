@@ -6,7 +6,8 @@ const monthContainer = document.getElementById("month");
 const monthYearLabel = document.getElementById("month-year");
 const prevBtn = document.getElementById("prev");
 const nextBtn = document.getElementById("next");
-const popupTraining = document.getElementById("popup-training");
+const popupPreviewDay = document.getElementById("popup-preview-day");
+const popupDate = document.getElementById("popup-date"); // ajouté ici
 const monthNames = [
   "Janvier",
   "Février",
@@ -30,6 +31,8 @@ const dayNames = [
   "Samedi",
   "Dimanche",
 ];
+const prevDayBtn = document.getElementById("prev-day");
+const nextDayBtn = document.getElementById("next-day");
 
 // ----------------------------
 // Variables globales
@@ -37,6 +40,21 @@ const dayNames = [
 const today = new Date();
 let currentYear = today.getFullYear();
 let currentMonth = today.getMonth(); // 0 = janvier
+let currentDay = null; // ajouté ici
+
+// NEW: stockage global du tableau généré par generateThreeMonths
+let threeMonthsDays = [];
+window.threeMonthsDays = threeMonthsDays; // accessible depuis la console
+
+// ----------------------------
+// Fonction utilitaire pour formater la date dans la popup
+// ----------------------------
+function setPopupDate(date) {
+  const idx = (date.getDay() + 6) % 7; // lundi = 0
+  popupDate.textContent = `${dayNames[idx]} ${date.getDate()} ${
+    monthNames[date.getMonth()]
+  }`;
+}
 
 // ----------------------------
 // Générer un mois complet avec débordements
@@ -135,7 +153,46 @@ function renderMonth(year, monthIndex) {
 }
 
 // ----------------------------
-// Navigation
+// Initialisation
+// ----------------------------
+renderMonth(currentYear, currentMonth);
+
+// ----------------------------
+// Fonction génération 3 mois
+// ----------------------------
+function generateThreeMonths(year, monthIndex) {
+  const days = [];
+  // Mois précédent
+  const prevMonth = monthIndex - 1 < 0 ? 11 : monthIndex - 1;
+  const prevYear = monthIndex - 1 < 0 ? year - 1 : year;
+  const prevMonthLastDate = new Date(prevYear, prevMonth + 1, 0).getDate();
+  for (let i = 1; i <= prevMonthLastDate; i++) {
+    days.push(new Date(prevYear, prevMonth, i));
+  }
+
+  // Mois courant
+  const currentMonthLastDate = new Date(year, monthIndex + 1, 0).getDate();
+  for (let i = 1; i <= currentMonthLastDate; i++) {
+    days.push(new Date(year, monthIndex, i));
+  }
+
+  // Mois suivant
+  const nextMonth = monthIndex + 1 > 11 ? 0 : monthIndex + 1;
+  const nextYear = monthIndex + 1 > 11 ? year + 1 : year;
+  const nextMonthLastDate = new Date(nextYear, nextMonth + 1, 0).getDate();
+  for (let i = 1; i <= nextMonthLastDate; i++) {
+    days.push(new Date(nextYear, nextMonth, i));
+  }
+
+  // MAJ du stockage global
+  threeMonthsDays = days;
+  window.threeMonthsDays = threeMonthsDays;
+
+  return days;
+}
+
+// ----------------------------
+// Navigation Mois
 // ----------------------------
 prevBtn.addEventListener("click", () => {
   currentMonth--;
@@ -143,7 +200,8 @@ prevBtn.addEventListener("click", () => {
     currentMonth = 11;
     currentYear--;
   }
-  renderMonth(currentYear, currentMonth);
+  const days = generateThreeMonths(currentYear, currentMonth);
+  renderMonth(currentYear, currentMonth, days);
 });
 
 nextBtn.addEventListener("click", () => {
@@ -152,32 +210,62 @@ nextBtn.addEventListener("click", () => {
     currentMonth = 0;
     currentYear++;
   }
-  renderMonth(currentYear, currentMonth);
+  const days = generateThreeMonths(currentYear, currentMonth);
+  renderMonth(currentYear, currentMonth, days);
 });
 
 // ----------------------------
-// Clic sur un jour & Apparition popup groupe musculaire
+// Initialisation affichage
+// ----------------------------
+const initialDays = generateThreeMonths(currentYear, currentMonth);
+renderMonth(currentYear, currentMonth, initialDays);
+
+// ----------------------------
+// Clic sur un jour & Apparition popup preview-day
 // ----------------------------
 monthContainer.addEventListener("click", (e) => {
   if (e.target.closest(".day")) {
-    const popupDate = document.getElementById("popup-date");
     const dateClicked = e.target.closest(".day").dataset.date;
-    const dateObj = new Date(dateClicked);
-
-    const formattedDate =
-      dayNames[(dateObj.getDay() + 6) % 7] +
-      " " +
-      dateObj.getDate() +
-      " " +
-      monthNames[dateObj.getMonth()];
-
-    popupTraining.style.display = "flex";
-
-    popupDate.textContent = formattedDate;
+    currentDay = new Date(dateClicked);
+    popupPreviewDay.style.display = "flex";
+    setPopupDate(currentDay);
   }
+  console.log("Jour cliqué :", currentDay);
 });
 
 // ----------------------------
-// Initialisation
+// Navigation d'un jour à l'autre
 // ----------------------------
-renderMonth(currentYear, currentMonth);
+prevDayBtn.addEventListener("click", () => {
+  if (!currentDay) return;
+  const i = threeMonthsDays.findIndex(
+    (d) => d.getTime() === currentDay.getTime()
+  );
+
+  if (i > 0) {
+    currentDay = threeMonthsDays[i - 1];
+  } else {
+    const d = new Date(currentDay);
+    d.setDate(d.getDate() - 1);
+    currentDay = d;
+  }
+
+  setPopupDate(currentDay);
+});
+
+nextDayBtn.addEventListener("click", () => {
+  if (!currentDay) return;
+  const i = threeMonthsDays.findIndex(
+    (d) => d.getTime() === currentDay.getTime()
+  );
+
+  if (i !== -1 && i < threeMonthsDays.length - 1) {
+    currentDay = threeMonthsDays[i + 1];
+  } else {
+    const d = new Date(currentDay);
+    d.setDate(d.getDate() + 1);
+    currentDay = d;
+  }
+
+  setPopupDate(currentDay);
+});
