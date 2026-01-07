@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div class="overlay"></div>
     <div class="calendar">
       <!-- Navigation mois -->
       <div class="calendar-header">
@@ -43,8 +44,45 @@
       <!-- Popup choix de séance  -->
       <div class="popup-preview-day" id="popup-preview-day">
         <button class="prev-day" id="prev-day">&lt;</button>
-        <div class="popup-date" id="popup-date"></div>
+        <div class="info-day">
+          <div class="popup-date" id="popup-date"></div>
+          <div id="day-content"></div>
+          <button id="add-group">+ Groupe</button>
+        </div>
         <button class="next-day" id="next-day">&gt;</button>
+      </div>
+    </div>
+
+    <div id="exo-modal" class="exo-modal" style="display: none">
+      <div class="exo-modal-box">
+        <div class="exo-modal-header">
+          <div id="exo-modal-title" class="exo-modal-title">Exercice</div>
+          <button id="exo-modal-close" type="button">Fermer</button>
+        </div>
+
+        <div class="exo-modal-body">
+          <label>
+            Séries
+            <input id="exo-series" type="number" min="1" step="1" />
+          </label>
+
+          <label>
+            Reps
+            <input id="exo-reps" type="number" min="0" step="1" />
+          </label>
+
+          <label>
+            Charge (kg)
+            <input id="exo-weight" type="number" min="0" step="0.5" />
+          </label>
+
+          <label>
+            Récup (sec)
+            <input id="exo-rest" type="number" min="0" step="5" />
+          </label>
+
+          <button id="exo-save" type="button">Enregistrer</button>
+        </div>
       </div>
     </div>
 

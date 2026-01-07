@@ -4,14 +4,22 @@ body {
   padding: 0;
   display: flex;
   justify-content: center;
-  padding-top: 50px;
 }
 
+.overlay {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.315);
+  position: absolute;
+  z-index: 1;
+  display: none;
+}
 .calendar {
   width: 90%;
   max-width: 800px;
   height: 100vh;
   position: relative;
+  padding-top: 50px;
 }
 
 .calendar-header {
@@ -91,39 +99,40 @@ body {
   left: 50%;
   transform: translate(-50%, -75%);
   border-radius: 12px;
+  z-index: 2;
 }
 .prev-day,
 .next-day {
-  width: 30px;
-  height: 30px;
+  width: 10%;
+  height: auto;
   border-radius: 999px;
   border: none;
-  margin: 0;
-  padding: 10px;
   cursor: pointer;
   background-color: red;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: auto 10px;
+  margin: auto;
   transition: 0.3s ease;
 }
 .prev-day:hover,
 .next-day:hover {
-  width: 30px;
-  height: 30px;
+  width: 10%;
+  height: auto;
   border-radius: 999px;
   border: none;
-  margin: 0;
-  padding: 10px;
   cursor: pointer;
   background-color: black;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: auto 10px;
+  margin: auto;
+}
+.info-day {
+  display: flex;
+  flex-direction: column;
 }
 .popup-date {
   color: white;
@@ -131,4 +140,39 @@ body {
   justify-content: center;
   padding-top: 10%;
   width: 350px;
+  margin-bottom: 50px;
+}
+.exo-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.55);
+  justify-content: center;
+  align-items: center;
+}
+
+.exo-modal-box {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  width: min(420px, 92vw);
+}
+
+.exo-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.exo-modal-body {
+  display: grid;
+  gap: 10px;
+}
+
+.exo-modal-body label {
+  display: grid;
+  gap: 6px;
 }
