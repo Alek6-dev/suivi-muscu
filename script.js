@@ -519,3 +519,12 @@ nextDayBtn.addEventListener("click", () => goToRelativeDay(1));
 // ----------------------------
 generateThreeMonths(currentYear, currentMonth);
 renderMonth(currentYear, currentMonth);
+
+// ----------------------------
+// PWA
+// ----------------------------
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js");
+  });
+}
