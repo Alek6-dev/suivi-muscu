@@ -5,6 +5,12 @@ body {
   display: flex;
   justify-content: center;
 }
+/* --- Fix global overflow mobile --- */
+html,
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
 
 .overlay {
   width: 100%;
@@ -139,7 +145,6 @@ body {
   display: flex;
   justify-content: center;
   padding-top: 10%;
-  width: 350px;
   margin-bottom: 50px;
 }
 .exo-modal {
@@ -175,4 +180,71 @@ body {
 .exo-modal-body label {
   display: grid;
   gap: 6px;
+}
+
+/* --- Mobile: popup/jour doit être plein écran et scroller verticalement --- */
+@media (max-width: 768px) {
+  /* Remplace .day-modal par TON sélecteur de popup (modal/jour) */
+  .popup-preview-day {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70vw !important;
+    height: 70vh !important;
+    max-width: 100vw;
+    max-height: 100vh;
+
+    margin: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .prev,
+  .next {
+    width: 50px;
+    display: flex;
+    align-items: center;
+  }
+  .prev {
+  }
+  .next {
+  }
+  .prev-day,
+  .next-day {
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    background-color: rgb(226, 226, 226);
+    color: rgb(0, 0, 0);
+    margin: auto;
+    transition: 0.3s ease;
+  }
+  .prev-day:hover,
+  .next-day:hover {
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    margin: auto;
+  }
+  .info-day {
+    width: 80%;
+    padding: 0 10px;
+  }
+  .popup-date {
+    color: white;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+  }
+  .group-row {
+    color: red;
+  }
 }

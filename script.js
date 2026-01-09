@@ -521,6 +521,22 @@ generateThreeMonths(currentYear, currentMonth);
 renderMonth(currentYear, currentMonth);
 
 // ----------------------------
+// Empêche le double-tap de zoom sur iOS Safari
+// ----------------------------
+let lastTouchEnd = 0;
+document.addEventListener(
+  "touchend",
+  (e) => {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) {
+      e.preventDefault();
+    }
+    lastTouchEnd = now;
+  },
+  { passive: false }
+);
+
+// ----------------------------
 // PWA
 // ----------------------------
 if ("serviceWorker" in navigator) {
