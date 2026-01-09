@@ -207,10 +207,6 @@ body {
     display: flex;
     align-items: center;
   }
-  .prev {
-  }
-  .next {
-  }
   .prev-day,
   .next-day {
     width: 30px;
